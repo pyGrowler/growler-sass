@@ -2,6 +2,8 @@
 Growler-Sass
 ============
 
+|pypi-version| |travis| |coveralls|
+
 A Growler_ middleware package for rendering sass_ files into CSS
 to be sent to the browser.
 
@@ -55,7 +57,7 @@ And a python script to run a webapp, ``server/app.py``
     app.create_server_and_run_forever(...)
 
 A request made to ``/styles/neat_style.css`` will return the compiled contents
-of neat_style:
+of ``neat_style.sass``:
 
 .. code:: css
 
@@ -72,3 +74,17 @@ This python package is licensed under the MIT license.
 .. _Growler: https://github.com/pyGrowler/Growler
 .. _sass: http://sass-lang.com/
 .. _libsass: https://hongminhee.org/libsass-python/
+
+
+.. |pypi-version| image:: https://img.shields.io/pypi/v/growler-sass.svg
+                  :target: https://pypi.python.org/pypi/growler-sass/
+                  :alt: Latest PyPI version
+
+
+.. |travis| image:: https://travis-ci.org/pyGrowler/growler-sass.svg?branch=master
+            :target: https://travis-ci.org/pyGrowler/growler-sass/branches?branch=master
+            :alt: Testing Report (Master Branch)
+
+.. |coveralls| image:: https://coveralls.io/repos/github/pyGrowler/growler-sass/badge.svg?branch=master
+               :target: https://coveralls.io/github/pyGrowler/growler-sass?branch=master
+               :alt: Coverage Report (Master Branch)
