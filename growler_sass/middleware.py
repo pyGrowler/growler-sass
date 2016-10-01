@@ -80,6 +80,17 @@ class SassMiddleware:
             filename = path[start:stop] + '.sass'
             return filename
 
+    def get_etag(self, filepath):
+       """
+       Return the etag of the hh
+       """
+       file_info = filepath.stat()
+       mod_time = file_info.st_mtime
+       inode = file_info.st_inode
+       size = file_info.st_size
+       etag = '%x-%x' % (size, mod_time + inode)
+       return etag
+
     def __call__(self, req, res):
         """
         Called with a req, res pair. If the request path matches the
