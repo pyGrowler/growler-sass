@@ -9,10 +9,10 @@ python:
   - "nightly"
 
 install:
-  - pip install -qU pytest pytest-runner pytest-cov python-coveralls
+  - pip install -qU pytest libsass pytest-runner pytest-cov python-coveralls
 
 script:
-  - python setup.py pytest --addopts '--cov=growler_sass --cov-report=term-missing'
+  - python setup.py pytest --addopts 'tests --cov=growler_sass --cov-report=term-missing'
 
 after_success:
   - coveralls
