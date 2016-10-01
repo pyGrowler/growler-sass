@@ -47,7 +47,7 @@ class SassMiddleware:
 
         # dest `property` forces starting and endind with forward slash
         self.dest = dest
-
+        self.etag_cache = {}
         self.compile_opts = kwargs
 
         _log.debug("Serving sass files from {} to {}",
@@ -80,6 +80,17 @@ class SassMiddleware:
             filename = path[start:stop] + '.sass'
             return filename
 
+    def get_etag(self, filepath):
+       """
+       Return the etag of the hh
+       """
+       file_info = filepath.stat()
+       mod_time = file_info.st_mtime
+       inode = file_info.st_ino
+       size = file_info.st_size
+       etag = '%x-%x' % (size, int(mod_time + inode))
+       return etag
+
     def __call__(self, req, res):
         """
         Called with a req, res pair. If the request path matches the
@@ -102,7 +113,23 @@ class SassMiddleware:
 
         if sass_file.is_file():
             _log.debug("Found matching SASS file: {}", sass_file)
-            result = sass.compile(filename=str(sass_file), **self.compile_opts)
+
+            etag = self.get_etag(sass_file)
+
+            res.headers['Etag'] = etag
+            requested_etag = req.headers.get('IF-NONE-MATCH', None)
+
+            if requested_etag == etag:
+                res.status_code = 304
+                res.end()
+                return
+
+            try:
+                result = self.etag_cache[etag]
+            except:
+                result = sass.compile(filename=str(sass_file),
+                                      **self.compile_opts)
+                self.etag_cache[etag] = result
             res.headers['Content-Type'] = self.CONTENT_TYPE
             res.send(result.encode())
 

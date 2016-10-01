@@ -22,7 +22,6 @@ OPTIONAL_REQUIRES = {
 
 TESTS_REQUIRE = [
     'pytest',
-    'pytest-asyncio',
 ]
 
 PACKAGES = [
